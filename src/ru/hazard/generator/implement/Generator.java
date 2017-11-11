@@ -2,8 +2,7 @@ package ru.hazard.generator.implement;
 
 import ru.hazard.generator.library.DataGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class Generator implements DataGenerator {
@@ -32,6 +31,46 @@ public class Generator implements DataGenerator {
         for (double i = from; i < to; i += step) {
             list.add(i);
         }
+        return list;
+    }
+
+    @Override
+    public List<Calendar> next(Calendar from, Calendar to, String type) {
+        List<Calendar> list = new ArrayList();
+        Calendar buffCalendar = (Calendar) from.clone();
+
+        //todo попробовать другую реализацию
+        switch (type) {
+            case "ALL_DAYS": {
+                while (buffCalendar.before(to)) {
+                    list.add(buffCalendar);
+                    buffCalendar = new GregorianCalendar(buffCalendar.get(Calendar.YEAR), buffCalendar.get(Calendar.MONTH), buffCalendar.get(Calendar.DATE));
+                    buffCalendar.add(Calendar.DAY_OF_YEAR, 1); //прибавляем один день
+                }
+                break;
+            }
+            case "WORKING_DAYS": {
+                while (buffCalendar.before(to)) {
+                    if (buffCalendar.get(Calendar.DAY_OF_WEEK) != 7 && buffCalendar.get(Calendar.DAY_OF_WEEK) != 1) {
+                        list.add(buffCalendar);
+                    }
+                    buffCalendar = new GregorianCalendar(buffCalendar.get(Calendar.YEAR), buffCalendar.get(Calendar.MONTH), buffCalendar.get(Calendar.DATE));
+                    buffCalendar.add(Calendar.DAY_OF_YEAR, 1); //прибавляем один день
+                }
+                break;
+            }
+            case "WEEKENDS": {
+                while (buffCalendar.before(to)) {
+                    if (buffCalendar.get(Calendar.DAY_OF_WEEK) == 7 || buffCalendar.get(Calendar.DAY_OF_WEEK) == 1) {
+                        list.add(buffCalendar);
+                    }
+                    buffCalendar = new GregorianCalendar(buffCalendar.get(Calendar.YEAR), buffCalendar.get(Calendar.MONTH), buffCalendar.get(Calendar.DATE));
+                    buffCalendar.add(Calendar.DAY_OF_YEAR, 1); //прибавляем один день
+                }
+                break;
+            }
+        }
+
         return list;
     }
 }

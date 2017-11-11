@@ -1,5 +1,7 @@
 package ru.hazard.generator.library;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +40,21 @@ public interface DataGenerator {
      * @return List<Double>
      */
     public List<Double> next(double from, double to, double step);
+
+    /**
+     * даты в указанном диапазоне
+     * от from до to c указанием type
+     * type:
+     * "ALL_DAYS" - все дни
+     * "WORKING_DAYS" - рабочие дни
+     * "WEEKENDS" - выходные дни
+     *
+     * @param from
+     * @param to
+     * @param type
+     * @return List<Calendar>
+     */
+    public List<Calendar> next(Calendar from, Calendar to, String type);
 
 
 }
