@@ -3,6 +3,8 @@ package ru.hazard.generator;
 import ru.hazard.generator.implement.Generator;
 import ru.hazard.generator.library.DataGenerator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -12,22 +14,42 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //целые числа в указанном диапазоне
-        //от 5 до 15
-        //testNext(5, 15);
+        System.out.println("***целые числа в указанном диапазоне***");
+        testNext(5, 15);
+        System.out.println();
 
-        //целые числа в указанном диапазоне c шагом
-        //от 5 до 15 c шагом 4
-        //testNext(5, 15, 4);
+        System.out.println("***целые числа в указанном диапазоне с шагом***");
+        testNext(5, 15, 4);
+        System.out.println();
 
-        //целые числа в указанном диапазоне c шагом
-        //от 5.54 до 15.6 c шагом 2.32
-        //testNext(5.54, 15.6, 2.32);
+        System.out.println("***вещественные числа в диапазоне с шагом***");
+        testNext(5.54, 15.6, 2.32);
+        System.out.println();
 
+        System.out.println("***даты в указанном диапазоне между двумя датами***");
         Calendar fromDate = new GregorianCalendar(2015, Calendar.NOVEMBER, 23);
-        Calendar toDate = new GregorianCalendar(2015, Calendar.DECEMBER, 5);
+        Calendar toDate = new GregorianCalendar(2015, Calendar.DECEMBER, 2);
+        System.out.println("*все дни*");
+        testNext(fromDate, toDate, "ALL_DAYS");
+        System.out.println("*рабочие дни*");
+        testNext(fromDate, toDate, "WORKING_DAYS");
+        System.out.println("*выходные дни*");
         testNext(fromDate, toDate, "WEEKENDS");
+        System.out.println();
 
+        System.out.println("***форматирование строки по правилу***");
+        long number = 923128023;
+        System.out.println(data.next(number));
+        System.out.println();
+
+        System.out.println("***считывание слов из файла***");
+        //!!!путь для Linux
+        //надеюсь File.separator исправит ситуацию и путь пройдет для Windows :)
+        List<String> list = data.next("src" + File.separator + "input");
+        for (String str : list) {
+            System.out.print(str + " ");
+        }
+        System.out.println();
     }
 
     //тестирование целых чисел в указанном диапазоне
@@ -60,6 +82,7 @@ public class Main {
         }
     }
 
+    //даты в диапазоне
     private static void testNext(Calendar from, Calendar to, String type) {
         List<Calendar> list;
         list = data.next(from, to, type);

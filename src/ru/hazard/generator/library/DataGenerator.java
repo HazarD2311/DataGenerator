@@ -1,7 +1,6 @@
 package ru.hazard.generator.library;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,5 +55,20 @@ public interface DataGenerator {
      */
     public List<Calendar> next(Calendar from, Calendar to, String type);
 
+    /**
+     * форматирование строки по шаблону
+     * 123456 -> 12-34-56
+     *
+     * @param number
+     * @return String
+     */
+    public String next(long number);
 
+    /**
+     * считывание слов из файла
+     *
+     * @param pathOfFile
+     * @return List<String>
+     */
+    public List<String> next(String pathOfFile);
 }

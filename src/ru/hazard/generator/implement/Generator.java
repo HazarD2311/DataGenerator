@@ -2,6 +2,7 @@ package ru.hazard.generator.implement;
 
 import ru.hazard.generator.library.DataGenerator;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -73,4 +74,52 @@ public class Generator implements DataGenerator {
 
         return list;
     }
+
+    @Override
+    public String next(long number) {
+        int length = (int) Math.ceil(Math.log10(number)); //кол-во цифр в номере
+        int count = 0;
+        int[] numerals = parseNumber(number, length);
+        StringBuilder sNumber = new StringBuilder();
+        for (int i = length - 1; i >= 0; i--) {
+            sNumber.append(numerals[i]);
+            if (count % 2 != 0 && i != 0)
+                sNumber.append('-');
+            count++;
+        }
+        return sNumber.toString();
+    }
+
+    @Override
+    public List<String> next(String pathOfFile) {
+        List<String> list = new ArrayList();
+        Scanner scn = null;
+        try {
+            scn = new Scanner(new File(pathOfFile));
+        } catch (Exception e) {
+            System.out.println("Файл не найден");
+            return null;
+        }
+
+        while (scn.hasNext()) {
+            list.add(scn.next());
+        }
+
+        return list;
+    }
+
+    private int[] parseNumber(long number, int length) {
+        int[] numerals = new int[length];
+        long buffNumb = number;
+        int i = 0;
+        while (buffNumb > 0) {
+            numerals[i] = (int) buffNumb % 10;
+            buffNumb = buffNumb / 10;
+            i++;
+        }
+
+        return numerals;
+    }
+
+
 }
