@@ -1,5 +1,6 @@
 package ru.hazard.generator.implement;
 
+import ru.hazard.generator.implement.models.*;
 import ru.hazard.generator.library.DataGenerator;
 
 import java.io.File;
@@ -10,115 +11,44 @@ public class Generator implements DataGenerator {
 
     @Override
     public List<Integer> next(int from, int to) {
-        List list = new ArrayList<Integer>();
-        for (int i = from; i < to; i++) {
-            list.add(i);
-        }
-        return list;
+        IntegerRange intRange = new IntegerRange(from, to);
+        intRange.next();
+        return intRange.getResult();
     }
 
     @Override
     public List<Integer> next(int from, int to, int step) {
-        List list = new ArrayList<Integer>();
-        for (int i = from; i < to; i += step) {
-            list.add(i);
-        }
-        return list;
+        IntegerRangeStep intRangeStep = new IntegerRangeStep(from, to, step);
+        intRangeStep.next();
+        return intRangeStep.getResult();
     }
 
     @Override
     public List<Double> next(double from, double to, double step) {
-        List list = new ArrayList<Double>();
-        for (double i = from; i < to; i += step) {
-            list.add(i);
-        }
-        return list;
+        DoubleRangeStep doubleRangeStep = new DoubleRangeStep(from, to, step);
+        doubleRangeStep.next();
+        return doubleRangeStep.getResult();
     }
 
     @Override
-    public List<Calendar> next(Calendar from, Calendar to, String type) {
-        List<Calendar> list = new ArrayList();
-        Calendar buffCalendar = (Calendar) from.clone();
-
-        //todo попробовать другую реализацию
-        switch (type) {
-            case "ALL_DAYS": {
-                while (buffCalendar.before(to)) {
-                    list.add(buffCalendar);
-                    buffCalendar = new GregorianCalendar(buffCalendar.get(Calendar.YEAR), buffCalendar.get(Calendar.MONTH), buffCalendar.get(Calendar.DATE));
-                    buffCalendar.add(Calendar.DAY_OF_YEAR, 1); //прибавляем один день
-                }
-                break;
-            }
-            case "WORKING_DAYS": {
-                while (buffCalendar.before(to)) {
-                    if (buffCalendar.get(Calendar.DAY_OF_WEEK) != 7 && buffCalendar.get(Calendar.DAY_OF_WEEK) != 1) {
-                        list.add(buffCalendar);
-                    }
-                    buffCalendar = new GregorianCalendar(buffCalendar.get(Calendar.YEAR), buffCalendar.get(Calendar.MONTH), buffCalendar.get(Calendar.DATE));
-                    buffCalendar.add(Calendar.DAY_OF_YEAR, 1); //прибавляем один день
-                }
-                break;
-            }
-            case "WEEKENDS": {
-                while (buffCalendar.before(to)) {
-                    if (buffCalendar.get(Calendar.DAY_OF_WEEK) == 7 || buffCalendar.get(Calendar.DAY_OF_WEEK) == 1) {
-                        list.add(buffCalendar);
-                    }
-                    buffCalendar = new GregorianCalendar(buffCalendar.get(Calendar.YEAR), buffCalendar.get(Calendar.MONTH), buffCalendar.get(Calendar.DATE));
-                    buffCalendar.add(Calendar.DAY_OF_YEAR, 1); //прибавляем один день
-                }
-                break;
-            }
-        }
-
-        return list;
+    public List<Calendar> next(Calendar from, Calendar to, String type) throws CloneNotSupportedException {
+        CalendarRange calendarRange = new CalendarRange(from, to, type);
+        calendarRange.next();
+        return calendarRange.getResult();
     }
 
     @Override
     public String next(long number) {
-        int length = (int) Math.ceil(Math.log10(number)); //кол-во цифр в номере
-        int count = 0;
-        int[] numerals = parseNumber(number, length);
-        StringBuilder sNumber = new StringBuilder();
-        for (int i = length - 1; i >= 0; i--) {
-            sNumber.append(numerals[i]);
-            if (count % 2 != 0 && i != 0)
-                sNumber.append('-');
-            count++;
-        }
-        return sNumber.toString();
+        FormatNumber formatNumber = new FormatNumber(number);
+        formatNumber.next();
+        return formatNumber.getResult();
     }
 
     @Override
     public List<String> next(String pathOfFile) {
-        List<String> list = new ArrayList();
-        Scanner scn = null;
-        try {
-            scn = new Scanner(new File(pathOfFile));
-        } catch (Exception e) {
-            System.out.println("Файл не найден");
-            return null;
-        }
-
-        while (scn.hasNext()) {
-            list.add(scn.next());
-        }
-
-        return list;
-    }
-
-    private int[] parseNumber(long number, int length) {
-        int[] numerals = new int[length];
-        long buffNumb = number;
-        int i = 0;
-        while (buffNumb > 0) {
-            numerals[i] = (int) buffNumb % 10;
-            buffNumb = buffNumb / 10;
-            i++;
-        }
-
-        return numerals;
+        FromFile fromFile = new FromFile(pathOfFile);
+        fromFile.next();
+        return fromFile.getResult();
     }
 
 

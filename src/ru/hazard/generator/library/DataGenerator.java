@@ -51,9 +51,9 @@ public interface DataGenerator {
      * @param from
      * @param to
      * @param type
-     * @return List<Calendar>
+     * @return List<CalendarRange>
      */
-    public List<Calendar> next(Calendar from, Calendar to, String type);
+    public List<Calendar> next(Calendar from, Calendar to, String type) throws CloneNotSupportedException;
 
     /**
      * форматирование строки по шаблону

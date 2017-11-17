@@ -12,7 +12,7 @@ public class Main {
 
     private static DataGenerator data = new Generator();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
 
         System.out.println("***целые числа в указанном диапазоне***");
         testNext(5, 15);
@@ -83,7 +83,7 @@ public class Main {
     }
 
     //даты в диапазоне
-    private static void testNext(Calendar from, Calendar to, String type) {
+    private static void testNext(Calendar from, Calendar to, String type) throws CloneNotSupportedException {
         List<Calendar> list;
         list = data.next(from, to, type);
 
